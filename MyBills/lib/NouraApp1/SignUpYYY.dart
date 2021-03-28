@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_app1/NouraApp1/Button.dart';
 import 'package:flutter_app1/NouraApp1/Screen/Profile.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'Screen/HomePage.dart';
 import 'Header.dart';
 
-class LoginYYY extends StatefulWidget {
+class SignUpYYY extends StatefulWidget {
   @override
-  _LoginYYY createState() => _LoginYYY();
+  _SignUpYYY createState() => _SignUpYYY();
 }
 
-class _LoginYYY extends State<LoginYYY> {
+class _SignUpYYY extends State<SignUpYYY> {
   String _email, _password;
   final auth = FirebaseAuth.instance;
 
@@ -17,7 +19,9 @@ class _LoginYYY extends State<LoginYYY> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+
       body: Container(
+
         width: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -28,14 +32,15 @@ class _LoginYYY extends State<LoginYYY> {
 
         child: Column(children: [
 
+
           Header(),
           Expanded(
             child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(60),
-                    topRight: Radius.circular(60),
+                    topLeft: Radius.circular(40),
+                    topRight: Radius.circular(40),
                   ),
                 ),
                 child: Column(
@@ -82,16 +87,17 @@ class _LoginYYY extends State<LoginYYY> {
                               vertical: 17, horizontal: 20),
                           color: Colors.teal[400],
                           child: Text(
-                            'Login',
-                            style: TextStyle(color: Colors.white,fontSize: 17.0,),
+                            'Sign Up',
+
+                            style: TextStyle(color: Colors.white, fontSize: 17.0,),
                           ),
                           onPressed: () {
-                            auth.signInWithEmailAndPassword(
-                                    email: _email, password: _password).then((_) {
-                              Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (context) => Profile()));
-                            });
+                            auth.createUserWithEmailAndPassword(
+                                email: _email, password: _password).then((_) {
+                              //   Navigator.of(context).pushReplacement(
+                              //       MaterialPageRoute(builder: (context) => HomePage()));
+                              //
+                              sendVerificationEmail();});
                           },
                         ),
                       ),
@@ -104,5 +110,20 @@ class _LoginYYY extends State<LoginYYY> {
         ]),
       ),
     );
+
+  }
+  //verification code
+  void sendVerificationEmail()  async{
+    User firebaseUser = await FirebaseAuth.instance.currentUser;
+    await firebaseUser.sendEmailVerification();
+
+    Fluttertoast.showToast(
+        msg: "email verifcation link has sent to your email.");
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => Profile()),
+            (Route <dynamic> route) => false
+    );
   }
 }
+

@@ -87,7 +87,7 @@ class _LoginYYY extends State<LoginYYY> {
                           ),
                           onPressed: () {
                             auth.signInWithEmailAndPassword(
-                                    email: _email, password: _password).then((_) {
+                                email: _email, password: _password).then((_) {
                               Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
                                       builder: (context) => Profile()));

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_app1/NouraApp1/Button.dart';
+import 'package:flutter_app1/NouraApp1/Screen/Profile.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'Screen/HomePage.dart';
 import 'Header.dart';
 
@@ -91,11 +93,12 @@ class _SignUpYYY extends State<SignUpYYY> {
                           ),
                           onPressed: () {
                             auth.createUserWithEmailAndPassword(
-                                email: _email, password: _password).then((_) {
-                              Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(builder: (context) => HomePage()));
-                            });
-                          },
+                                 email: _email, password: _password).then((_) {
+                            //   Navigator.of(context).pushReplacement(
+                            //       MaterialPageRoute(builder: (context) => HomePage()));
+                            //
+                            sendVerificationEmail();});
+                            },
                         ),
                       ),
                     )
@@ -107,6 +110,20 @@ class _SignUpYYY extends State<SignUpYYY> {
         ]),
       ),
     );
+
+  }
+  //verification code
+  void sendVerificationEmail()  async{
+User firebaseUser = await FirebaseAuth.instance.currentUser;
+await firebaseUser.sendEmailVerification();
+
+Fluttertoast.showToast(
+    msg: "email verifcation link has sent to your email.");
+Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(builder: (_) => Profile()),
+    (Route <dynamic> route) => false
+);
   }
 }
 

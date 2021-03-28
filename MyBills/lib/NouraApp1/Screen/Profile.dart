@@ -124,7 +124,7 @@ class _ProfileState extends State<Profile> {
                 ))
           ])
         ])
-     );
+    );
   }
 
   Widget buildTextField(
